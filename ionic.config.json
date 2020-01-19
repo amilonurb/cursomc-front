@@ -1,5 +1,7 @@
 {
-  "name": "cursomc-front",
-  "integrations": {},
-  "type": "ionic-angular"
+    "name": "cursomc-front",
+    "integrations": {
+        "cordova": {}
+    },
+    "type": "ionic-angular"
 }
