@@ -1,11 +1,11 @@
-import { CategoriaDTO } from './../../models/categoria.dto';
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { Observable } from 'rxjs/Rx';
 
-import { API_CONFIG as api } from '../../config/api.config';
+import { CategoriaDTO } from './../../models/categoria.dto';
 
+import { API_CONFIG as api } from '../../config/api.config';
 
 @Injectable()
 export class CategoriaService {
