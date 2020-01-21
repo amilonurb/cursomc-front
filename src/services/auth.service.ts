@@ -19,8 +19,19 @@ export class AuthService {
 
     authenticate(credenciais: CredenciaisDTO) {
         return this.httpClient.post(
-            `${api.baseURL}/login`,
+            `${api.baseURL}/auth/login`,
             credenciais,
+            {
+                observe: 'response',
+                responseType: 'text'
+            }
+        );
+    }
+
+    refreshToken() {
+        return this.httpClient.post(
+            `${api.baseURL}/auth/refresh_token`,
+            {},
             {
                 observe: 'response',
                 responseType: 'text'
