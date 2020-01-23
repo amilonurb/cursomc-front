@@ -1,9 +1,11 @@
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import { API_CONFIG } from './../config/api.config';
 import { StorageService } from './../services/storage.service';
 
+@Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
     constructor(public storageService: StorageService) { }

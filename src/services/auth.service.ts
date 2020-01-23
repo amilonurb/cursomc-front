@@ -1,17 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from "@angular/core";
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { JwtHelper } from 'angular2-jwt';
-
-import { StorageService } from './storage.service';
-import { LocalUser } from './../models/local-user';
-import { CredenciaisDTO } from './../models/credenciais.dto';
 import { API_CONFIG as api } from './../config/api.config';
+import { CredenciaisDTO } from './../models/credenciais.dto';
+import { LocalUser } from './../models/local-user';
+import { StorageService } from './storage.service';
 
 @Injectable()
 export class AuthService {
 
-    jwtHelper: JwtHelper = new JwtHelper;
+    jwtHelper: JwtHelperService = new JwtHelperService();
 
     constructor(
         public httpClient: HttpClient,
