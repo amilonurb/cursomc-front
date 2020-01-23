@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs/Rx';
 
 import { StorageService } from './../storage.service';
@@ -18,5 +18,15 @@ export class ClienteService {
     getImageFromBucket(id: string) {
         const url = `${api.bucketBaseURL}/cp${id}.jpg`;
         return this.httpClient.get(url, { responseType: 'blob' });
+    }
+
+    insert(cliente: ClienteDTO) {
+        return this.httpClient.post(
+            `${api.baseURL}/clientes`,
+            cliente,
+            {
+                observe: 'response',
+                responseType: 'text'
+            });
     }
 }
