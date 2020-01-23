@@ -27,6 +27,10 @@ export class CategoriasPage {
             .findAll()
             .subscribe(
                 response => this.items = response,
-                error => {});
+                error => { });
+    }
+
+    showProdutos(categoria_id: string) {
+        this.navCtrl.push('ProdutosPage', { categoria_id });
     }
 }
