@@ -6,7 +6,7 @@ import { ProdutoDTO } from '../../models/produto.dto';
 import { CartService } from '../../services/domain/cart.service';
 import { ProdutoService } from '../../services/domain/produto.service';
 
-IonicPage()
+@IonicPage()
 @Component({
     selector: 'page-cart',
     templateUrl: 'cart.html',
@@ -57,5 +57,9 @@ export class CartPage {
 
     goOn() {
         this.navCtrl.setRoot('CategoriasPage');
+    }
+
+    checkout() {
+        this.navCtrl.push('PicAddressPage');
     }
 }
