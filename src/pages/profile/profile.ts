@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { API_CONFIG as api } from './../../config/api.config';
-
-import { StorageService } from './../../services/storage.service';
 import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
+import { API_CONFIG as api } from './../../config/api.config';
+import { StorageService } from './../../services/storage.service';
 
 @IonicPage()
 @Component({
@@ -30,7 +29,7 @@ export class ProfilePage {
                 .findByEmail(localUser.email)
                 .subscribe(
                     response => {
-                        this.cliente = response;
+                        this.cliente = response as ClienteDTO;
                         this.getImageIfExists();
                     },
                     error => {

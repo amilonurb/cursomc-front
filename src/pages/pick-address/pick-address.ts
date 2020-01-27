@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import { EnderecoDTO } from '../../models/endereco.dto';
+import { ClienteService } from './../../services/domain/cliente.service';
+import { StorageService } from './../../services/storage.service';
 
 @IonicPage()
 @Component({
@@ -13,10 +16,25 @@ export class PickAddressPage {
 
     constructor(
         public navCtrl: NavController,
-        public navParams: NavParams) { }
+        public navParams: NavParams,
+        public storageService: StorageService,
+        public clienteService: ClienteService) { }
 
     ionViewDidLoad() {
-        console.log('ionViewDidLoad PickAddressPage');
+        const localUser = this.storageService.getLocalUser();
+        if (localUser && localUser.email) {
+            this.clienteService
+                .findByEmail(localUser.email)
+                .subscribe(
+                    response => this.enderecos = response['enderecos'],
+                    error => {
+                        if (error.status == 403) {
+                            this.navCtrl.setRoot('HomePage');
+                        }
+                    }
+                );
+        } else {
+            this.navCtrl.setRoot('HomePage');
+        }
     }
-
 }
