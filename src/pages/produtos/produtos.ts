@@ -12,7 +12,9 @@ import { API_CONFIG } from './../../config/api.config';
 })
 export class ProdutosPage {
 
-    produtos: ProdutoDTO[];
+    produtos: ProdutoDTO[] = [];
+
+    currentPage: number = 0;
 
     constructor(
         public navCtrl: NavController,
@@ -28,23 +30,26 @@ export class ProdutosPage {
         const loader = this.presentLoading();
         const { categoria_id } = this.navParams.data;
         this.produtoService
-            .findByCategoria(categoria_id)
+            .findByCategoria(categoria_id, this.currentPage, 10)
             .subscribe(response => {
                 loader.dismiss();
-                this.produtos = response['content'];
-                this.loadSmallImages();
+                const oldLength = this.produtos.length;
+                const newLength = this.produtos.push(response['content']);
+                this.loadSmallImages(oldLength, newLength - 1);
             }, error => loader.dismiss());
     }
 
-    loadSmallImages() {
-        this.produtos.forEach(produto => {
+    loadSmallImages(start: number, end: number) {
+        for (let index = start; index <= end; index++) {
+            const produto = this.produtos[index];
+
             this.produtoService
                 .getSmallImageFromBucket(produto.id)
                 .subscribe(
                     response => produto.imageURL = `${API_CONFIG.bucketBaseURL}/prod${produto.id}-small.jpg`,
                     error => { }
                 );
-        });
+        }
     }
 
     showDetails(produto_id: string) {
@@ -60,7 +65,19 @@ export class ProdutosPage {
     }
 
     doRefresh(event) {
+        this.currentPage = 0;
+        this.produtos = [];
         this.loadData();
         setTimeout(() => event.target.complete(), 2000);
+    }
+
+    doInfinite(infiniteScroll) {
+
+        this.currentPage++;
+        this.loadData();
+
+        setTimeout(() => {
+            infiniteScroll.complete();
+        }, 1000);
     }
 }
