@@ -21,20 +21,19 @@ export class ProdutosPage {
         public produtoService: ProdutoService) { }
 
     ionViewDidLoad() {
+        this.loadData();
+    }
+
+    private loadData() {
         const loader = this.presentLoading();
-
         const { categoria_id } = this.navParams.data;
-
         this.produtoService
             .findByCategoria(categoria_id)
-            .subscribe(
-                response => {
-                    loader.dismiss();
-                    this.produtos = response['content'];
-                    this.loadSmallImages();
-                },
-                error => loader.dismiss()
-            );
+            .subscribe(response => {
+                loader.dismiss();
+                this.produtos = response['content'];
+                this.loadSmallImages();
+            }, error => loader.dismiss());
     }
 
     loadSmallImages() {
@@ -58,5 +57,10 @@ export class ProdutosPage {
         });
         loader.present();
         return loader;
+    }
+
+    doRefresh(event) {
+        this.loadData();
+        setTimeout(() => event.target.complete(), 2000);
     }
 }
