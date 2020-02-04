@@ -72,4 +72,22 @@ export class ProfilePage {
             this.cameraOn = false;
         }, (error) => { });
     }
+
+    getGalleryPicture() {
+
+        this.cameraOn = true;
+
+        const options: CameraOptions = {
+            quality: 100,
+            sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+            destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.PNG,
+            mediaType: this.camera.MediaType.PICTURE
+        }
+
+        this.camera.getPicture(options).then((imageData) => {
+            this.picture = 'data:image/png;base64,' + imageData;
+            this.cameraOn = false;
+        }, (error) => { });
+    }
 }
