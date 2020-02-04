@@ -98,7 +98,7 @@ export class SignupPage {
             buttons: [
                 {
                     text: 'Ok',
-                    handler: () => { this.navCtrl.pop() }
+                    handler: () => { this.navCtrl.setRoot('HomePage') }
                 }
             ]
         });
