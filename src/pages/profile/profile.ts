@@ -70,10 +70,12 @@ export class ProfilePage {
             mediaType: this.camera.MediaType.PICTURE
         }
 
-        this.camera.getPicture(options).then((imageData) => {
-            this.picture = 'data:image/png;base64,' + imageData;
-            this.cameraOn = false;
-        }, (error) => { });
+        this.camera
+            .getPicture(options)
+            .then((imageData) => {
+                this.picture = 'data:image/png;base64,' + imageData;
+                this.cameraOn = false;
+            }, (error) => { this.cameraOn = false; });
     }
 
     getGalleryPicture() {
@@ -90,7 +92,7 @@ export class ProfilePage {
         this.camera.getPicture(options).then((imageData) => {
             this.picture = 'data:image/png;base64,' + imageData;
             this.cameraOn = false;
-        }, (error) => { });
+        }, (error) => { this.cameraOn = false; });
     }
 
     sendPicture() {
