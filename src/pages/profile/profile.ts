@@ -26,6 +26,10 @@ export class ProfilePage {
         public clienteService: ClienteService) { }
 
     ionViewDidLoad() {
+        this.loadData();
+    }
+
+    loadData() {
         let localUser = this.storageService.getLocalUser();
 
         if (localUser && localUser.email) {
@@ -57,7 +61,6 @@ export class ProfilePage {
     }
 
     getCameraPicture() {
-
         this.cameraOn = true;
 
         const options: CameraOptions = {
@@ -74,7 +77,6 @@ export class ProfilePage {
     }
 
     getGalleryPicture() {
-
         this.cameraOn = true;
 
         const options: CameraOptions = {
@@ -89,5 +91,20 @@ export class ProfilePage {
             this.picture = 'data:image/png;base64,' + imageData;
             this.cameraOn = false;
         }, (error) => { });
+    }
+
+    sendPicture() {
+        this.clienteService
+            .uploadPicture(this.picture)
+            .subscribe(
+                response => {
+                    this.picture = null;
+                    this.loadData();
+                },
+                error => { });
+    }
+
+    cancel() {
+        this.picture = null;
     }
 }
