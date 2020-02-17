@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { API_CONFIG as api } from './../../config/api.config';
+import { ImageUtilService } from './../../services/image-util.service';
 import { StorageService } from './../../services/storage.service';
 
 @IonicPage()
@@ -16,6 +18,7 @@ export class ProfilePage {
 
     cliente: ClienteDTO;
     picture: string;
+    profileImageURL;
     cameraOn: boolean = false;
 
     constructor(
@@ -23,7 +26,12 @@ export class ProfilePage {
         public navParams: NavParams,
         private camera: Camera,
         public storageService: StorageService,
-        public clienteService: ClienteService) { }
+        public clienteService: ClienteService,
+        public imageUtilService: ImageUtilService,
+        public sanitizer: DomSanitizer) {
+
+        this.profileImageURL = 'assets/imgs/avatar-blank.png';
+    }
 
     ionViewDidLoad() {
         this.loadData();
@@ -55,8 +63,18 @@ export class ProfilePage {
         this.clienteService
             .getImageFromBucket(this.cliente.id)
             .subscribe(
-                response => this.cliente.profileImgURL = `${api.bucketBaseURL}/cp${this.cliente.id}.jpg`,
-                error => { }
+                response => {
+                    this.cliente.profileImgURL = `${api.bucketBaseURL}/cp${this.cliente.id}.jpg`;
+                    this.imageUtilService
+                        .blobToDataURL(response)
+                        .then(dataUrl => {
+                            const url = dataUrl as string;
+                            this.profileImageURL = this.sanitizer.bypassSecurityTrustUrl(url);
+                        });
+                },
+                error => {
+                    this.profileImageURL = 'assets/imgs/avatar-blank.png';
+                }
             );
     }
 
@@ -101,7 +119,7 @@ export class ProfilePage {
             .subscribe(
                 response => {
                     this.picture = null;
-                    this.loadData();
+                    this.getImageIfExists();
                 },
                 error => { });
     }
